@@ -6,6 +6,9 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Dashboard from "@/pages/dashboard";
 import Documents from "@/pages/documents";
+import DocumentNew from "@/pages/document-new";
+import DocumentEdit from "@/pages/document-edit";
+import DocumentPreview from "@/pages/document-preview";
 import Clients from "@/pages/clients";
 import Payments from "@/pages/payments";
 import Reports from "@/pages/reports";
@@ -23,7 +26,14 @@ function Router() {
       
       {/* Main application routes */}
       <Route path="/dashboard" component={Dashboard} />
+      
+      {/* Document routes */}
       <Route path="/documents" component={Documents} />
+      <Route path="/document/new" component={DocumentNew} />
+      <Route path="/document/edit/:id" component={DocumentEdit} />
+      <Route path="/document-preview" component={DocumentPreview} />
+      
+      {/* Other main sections */}
       <Route path="/clients" component={Clients} />
       <Route path="/payments" component={Payments} />
       <Route path="/reports" component={Reports} />

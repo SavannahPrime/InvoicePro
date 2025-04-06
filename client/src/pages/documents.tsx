@@ -17,7 +17,7 @@ export default function Documents() {
         title="Documents" 
         description="Manage your invoices and quotations"
         actions={
-          <Link href="/invoice/new">
+          <Link href="/document/new">
             <Button>
               <PlusCircle className="h-4 w-4 mr-2" />
               New Document
@@ -72,11 +72,38 @@ export default function Documents() {
                     {doc.amount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link href={`/invoice/${doc.id}`} className="text-primary hover:text-primary-dark">
+                    <Link 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // Simulate fetching document and preparing for preview
+                        const mockInvoice = {
+                          invoiceNumber: `INV-${doc.id}`,
+                          isQuotation: doc.type === "Quotation",
+                          date: new Date(),
+                          clientName: doc.client,
+                          companyName: "SavannahPrime Agency",
+                          items: [
+                            {
+                              id: "1",
+                              description: "Professional Services",
+                              quantity: 1,
+                              unitPrice: parseFloat(doc.amount.replace(/[^0-9.-]+/g,"")),
+                              amount: parseFloat(doc.amount.replace(/[^0-9.-]+/g,""))
+                            }
+                          ],
+                          subtotal: doc.amount.replace(/[^0-9.-]+/g,""),
+                          total: doc.amount.replace(/[^0-9.-]+/g,"")
+                        };
+                        localStorage.setItem("previewInvoice", JSON.stringify(mockInvoice));
+                        window.location.href = "/document-preview";
+                      }}
+                      className="text-primary hover:text-primary-dark"
+                    >
                       View
                     </Link>
                     <span className="mx-2 text-gray-300">|</span>
-                    <Link href={`/invoice/${doc.id}/edit`} className="text-primary hover:text-primary-dark">
+                    <Link href={`/document/edit/${doc.id}`} className="text-primary hover:text-primary-dark">
                       Edit
                     </Link>
                   </td>

@@ -74,56 +74,40 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="h-full flex flex-col justify-between">
             <div className="px-4 py-6">
               <nav className="space-y-1">
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <Home className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Dashboard
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <Home className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Dashboard
                 </Link>
-                <Link href="/">
-                  <a className="bg-primary-50 text-primary hover:bg-primary-100 group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <FileText className="text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Documents
-                  </a>
+                <Link href="/" className="bg-primary-50 text-primary hover:bg-primary-100 group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <FileText className="text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Documents
                 </Link>
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <Users className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Clients
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <Users className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Clients
                 </Link>
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <CreditCard className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Payments
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <CreditCard className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Payments
                 </Link>
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <PieChart className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Reports
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <PieChart className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Reports
                 </Link>
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <ClipboardList className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Templates
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <ClipboardList className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Templates
                 </Link>
-                <Link href="/">
-                  <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                    <Building2 className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                    Company
-                  </a>
+                <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                  <Building2 className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                  Company
                 </Link>
               </nav>
             </div>
             <div className="border-t border-gray-200 p-4">
-              <Link href="/">
-                <a className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
-                  <Settings className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
-                  Settings
-                </a>
+              <Link href="/" className="text-gray-700 hover:bg-gray-50 hover:text-primary group flex items-center px-3 py-2.5 text-sm font-medium rounded-md">
+                <Settings className="text-gray-400 group-hover:text-primary mr-3 flex-shrink-0 h-5 w-5" />
+                Settings
               </Link>
               <div className="mt-4 px-3">
                 <div className="flex items-center">

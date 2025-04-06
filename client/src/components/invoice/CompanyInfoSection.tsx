@@ -3,13 +3,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Upload, Calendar as CalendarIcon, X } from "lucide-react";
+import { 
+  Upload, 
+  Calendar as CalendarIcon, 
+  X, 
+  Building2, 
+  Mail, 
+  MapPin, 
+  Hash, 
+  Clock
+} from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Invoice } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CompanyInfoSectionProps {
   invoice: Invoice;
@@ -112,152 +122,278 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {/* Company Logo */}
-      <div className="col-span-1">
-        <div className="flex flex-col items-start">
-          <div className="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-2 w-48 h-24 flex items-center justify-center relative">
-            {invoice.companyLogo ? (
-              <>
-                <img 
-                  src={invoice.companyLogo} 
-                  alt="Company Logo" 
-                  className="max-w-full max-h-full object-contain"
-                />
-                <Button 
-                  type="button" 
-                  size="icon" 
-                  variant="ghost" 
-                  className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-gray-200 hover:bg-gray-300"
-                  onClick={handleRemoveLogo}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </>
-            ) : (
-              <div className="text-center">
-                <Upload className="h-10 w-10 mx-auto text-gray-400" />
-                <span className="text-sm text-gray-500">Company Logo</span>
-              </div>
-            )}
+      <Card className="col-span-1 border border-gray-200 shadow-sm flex flex-col">
+        <CardContent className="p-5 flex-1 flex flex-col">
+          <div className="flex items-center mb-4">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <Building2 className="h-4 w-4 text-primary" />
+            </div>
+            <h3 className="text-sm font-medium text-gray-700">Company Logo</h3>
           </div>
-          <div className="relative">
-            <input
-              type="file"
-              id="logo-upload"
-              ref={fileInputRef}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              onChange={handleLogoChange}
-              accept="image/*"
-              disabled={logoUploading}
-            />
-            <Button
-              type="button"
-              variant="link"
-              className="text-sm text-primary hover:text-primary"
-              disabled={logoUploading}
-            >
-              {logoUploading ? "Uploading..." : "Upload Logo"}
-            </Button>
+          
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-6 w-full h-40 flex items-center justify-center relative overflow-hidden">
+              {invoice.companyLogo ? (
+                <div className="relative w-full h-full flex items-center justify-center group">
+                  <img 
+                    src={invoice.companyLogo} 
+                    alt="Company Logo" 
+                    className="max-w-full max-h-full object-contain"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <Button 
+                      type="button" 
+                      size="sm"
+                      variant="outline" 
+                      className="bg-white hover:bg-gray-100"
+                      onClick={handleRemoveLogo}
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <Upload className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">Drag and drop logo file</p>
+                  <p className="text-xs text-gray-500">or click to browse</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="mt-4 w-full relative">
+              <input
+                type="file"
+                id="logo-upload"
+                ref={fileInputRef}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                onChange={handleLogoChange}
+                accept="image/*"
+                disabled={logoUploading}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full text-sm bg-white"
+                disabled={logoUploading}
+              >
+                {logoUploading ? (
+                  <>
+                    <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="h-4 w-4 mr-2" />
+                    {invoice.companyLogo ? "Change Logo" : "Upload Logo"}
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Max file size: 2MB. Supported formats: JPG, PNG, SVG
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Company Info */}
-      <div className="col-span-1">
-        <h3 className="text-sm font-medium text-gray-500 mb-1">FROM</h3>
-        <div className="space-y-1">
-          <Input
-            value={invoice.companyName}
-            onChange={(e) =>
-              setInvoice((prev) => ({
-                ...prev,
-                companyName: e.target.value,
-              }))
-            }
-            className="font-semibold text-gray-800"
-            placeholder="Your Company Name"
-          />
-          <textarea
-            value={invoice.companyAddress || ""}
-            onChange={(e) =>
-              setInvoice((prev) => ({
-                ...prev,
-                companyAddress: e.target.value,
-              }))
-            }
-            className="w-full text-sm text-gray-600 resize-none p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-            placeholder="Company Address"
-            rows={3}
-          />
-          <Input
-            type="email"
-            value={invoice.companyEmail || ""}
-            onChange={(e) =>
-              setInvoice((prev) => ({
-                ...prev,
-                companyEmail: e.target.value,
-              }))
-            }
-            className="text-sm text-gray-600"
-            placeholder="company@example.com"
-          />
-        </div>
-      </div>
+      <Card className="col-span-1 border border-gray-200 shadow-sm">
+        <CardContent className="p-5">
+          <div className="flex items-center mb-4">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <Building2 className="h-4 w-4 text-primary" />
+            </div>
+            <h3 className="text-sm font-medium text-gray-700">Company Information</h3>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <Label 
+                htmlFor="company-name" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Company Name
+              </Label>
+              <div className="relative">
+                <Input
+                  id="company-name"
+                  value={invoice.companyName}
+                  onChange={(e) =>
+                    setInvoice((prev) => ({
+                      ...prev,
+                      companyName: e.target.value,
+                    }))
+                  }
+                  className="pl-9 bg-white/50 font-medium"
+                  placeholder="Your Company Name"
+                />
+                <Building2 className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              </div>
+            </div>
+            
+            <div>
+              <Label 
+                htmlFor="company-address" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Company Address
+              </Label>
+              <div className="relative">
+                <Textarea
+                  id="company-address"
+                  value={invoice.companyAddress || ""}
+                  onChange={(e) =>
+                    setInvoice((prev) => ({
+                      ...prev,
+                      companyAddress: e.target.value,
+                    }))
+                  }
+                  className="pl-9 pt-2 resize-none bg-white/50"
+                  placeholder="Street address, city, state, zip code"
+                  rows={3}
+                />
+                <MapPin className="h-4 w-4 text-gray-400 absolute left-3 top-3" />
+              </div>
+            </div>
+            
+            <div>
+              <Label 
+                htmlFor="company-email" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Company Email
+              </Label>
+              <div className="relative">
+                <Input
+                  id="company-email"
+                  type="email"
+                  value={invoice.companyEmail || ""}
+                  onChange={(e) =>
+                    setInvoice((prev) => ({
+                      ...prev,
+                      companyEmail: e.target.value,
+                    }))
+                  }
+                  className="pl-9 bg-white/50"
+                  placeholder="company@example.com"
+                />
+                <Mail className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Date and Invoice Number */}
-      <div className="col-span-1">
-        <div className="space-y-4">
-          <div>
-            <Label className="text-sm font-medium text-gray-500 mb-1">DATE</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !invoice.date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {invoice.date ? format(invoice.date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={invoice.date}
-                  onSelect={(date) => handleDateChange('date', date)}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+      <Card className="col-span-1 border border-gray-200 shadow-sm">
+        <CardContent className="p-5">
+          <div className="flex items-center mb-4">
+            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+              <Clock className="h-4 w-4 text-primary" />
+            </div>
+            <h3 className="text-sm font-medium text-gray-700">Document Details</h3>
           </div>
-          <div>
-            <Label className="text-sm font-medium text-gray-500 mb-1">DUE DATE</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !invoice.dueDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {invoice.dueDate ? format(invoice.dueDate, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={invoice.dueDate}
-                  onSelect={(date) => handleDateChange('dueDate', date)}
-                  initialFocus
+          
+          <div className="space-y-4">
+            <div>
+              <Label 
+                htmlFor="invoice-number" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Invoice Number
+              </Label>
+              <div className="relative">
+                <Input
+                  id="invoice-number"
+                  value={invoice.invoiceNumber}
+                  onChange={(e) =>
+                    setInvoice((prev) => ({
+                      ...prev,
+                      invoiceNumber: e.target.value,
+                    }))
+                  }
+                  className="pl-9 bg-white/50 font-medium"
+                  placeholder="INV-001"
                 />
-              </PopoverContent>
-            </Popover>
+                <Hash className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              </div>
+            </div>
+            
+            <div>
+              <Label 
+                htmlFor="date" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Issue Date
+              </Label>
+              <div className="relative">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="date"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal pl-9 bg-white/50",
+                        !invoice.date && "text-muted-foreground"
+                      )}
+                    >
+                      {invoice.date ? format(invoice.date, "PPP") : <span>Select date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={invoice.date}
+                      onSelect={(date) => handleDateChange('date', date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <CalendarIcon className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+              </div>
+            </div>
+            
+            <div>
+              <Label 
+                htmlFor="due-date" 
+                className="block text-xs font-medium text-gray-500 mb-1.5"
+              >
+                Due Date
+              </Label>
+              <div className="relative">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="due-date"
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal pl-9 bg-white/50",
+                        !invoice.dueDate && "text-muted-foreground"
+                      )}
+                    >
+                      {invoice.dueDate ? format(invoice.dueDate, "PPP") : <span>Select due date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={invoice.dueDate}
+                      onSelect={(date) => handleDateChange('dueDate', date)}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <Clock className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                {invoice.paymentTerms ? `Terms: ${invoice.paymentTerms}` : "Set payment terms below"}
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

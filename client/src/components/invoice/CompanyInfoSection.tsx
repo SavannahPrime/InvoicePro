@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Upload, Calendar as CalendarIcon } from "lucide-react";
+import { Upload, Calendar as CalendarIcon, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { Invoice } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CompanyInfoSectionProps {
   invoice: Invoice;
@@ -16,6 +18,8 @@ interface CompanyInfoSectionProps {
 
 export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionProps) {
   const [logoUploading, setLogoUploading] = useState(false);
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -23,26 +27,30 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
 
     // Check file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
-      alert("File size must be less than 2MB");
+      toast({
+        title: "Error",
+        description: "File size must be less than 2MB",
+        variant: "destructive",
+      });
       return;
     }
 
     // Check file type
     if (!file.type.match("image.*")) {
-      alert("Only image files are allowed");
+      toast({
+        title: "Error",
+        description: "Only image files are allowed",
+        variant: "destructive",
+      });
       return;
     }
 
     try {
       setLogoUploading(true);
       
-      // Create FormData and append the file
-      const formData = new FormData();
-      formData.append("logo", file);
-
-      // In a real app, we would upload to the server
-      // For now, we'll just use a FileReader to get a data URL
+      // Create FileReader to convert image to data URL
       const reader = new FileReader();
+      
       reader.onload = (event) => {
         const result = event.target?.result as string;
         setInvoice((prev) => ({
@@ -50,12 +58,46 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
           companyLogo: result,
         }));
         setLogoUploading(false);
+        toast({
+          title: "Success",
+          description: "Company logo uploaded successfully",
+        });
       };
+      
+      reader.onerror = () => {
+        setLogoUploading(false);
+        toast({
+          title: "Error",
+          description: "Failed to read image file",
+          variant: "destructive",
+        });
+      };
+      
       reader.readAsDataURL(file);
     } catch (error) {
       console.error("Error uploading logo:", error);
       setLogoUploading(false);
+      toast({
+        title: "Error",
+        description: "Failed to upload logo. Please try again.",
+        variant: "destructive",
+      });
     }
+  };
+  
+  const handleRemoveLogo = () => {
+    setInvoice((prev) => ({
+      ...prev,
+      companyLogo: "",
+    }));
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    toast({
+      title: "Logo Removed",
+      description: "Company logo has been removed",
+    });
   };
 
   const handleDateChange = (field: 'date' | 'dueDate', date: Date | undefined) => {
@@ -72,13 +114,24 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
       {/* Company Logo */}
       <div className="col-span-1">
         <div className="flex flex-col items-start">
-          <div className="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-2 w-48 h-24 flex items-center justify-center">
+          <div className="bg-gray-100 border border-dashed border-gray-300 rounded-md p-4 mb-2 w-48 h-24 flex items-center justify-center relative">
             {invoice.companyLogo ? (
-              <img 
-                src={invoice.companyLogo} 
-                alt="Company Logo" 
-                className="max-w-full max-h-full object-contain"
-              />
+              <>
+                <img 
+                  src={invoice.companyLogo} 
+                  alt="Company Logo" 
+                  className="max-w-full max-h-full object-contain"
+                />
+                <Button 
+                  type="button" 
+                  size="icon" 
+                  variant="ghost" 
+                  className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-gray-200 hover:bg-gray-300"
+                  onClick={handleRemoveLogo}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </>
             ) : (
               <div className="text-center">
                 <Upload className="h-10 w-10 mx-auto text-gray-400" />
@@ -90,6 +143,7 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
             <input
               type="file"
               id="logo-upload"
+              ref={fileInputRef}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               onChange={handleLogoChange}
               accept="image/*"

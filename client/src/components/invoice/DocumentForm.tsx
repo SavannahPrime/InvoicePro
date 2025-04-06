@@ -20,12 +20,31 @@ export function DocumentForm({ invoice, setInvoice }: DocumentFormProps) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const handleDownloadPdf = async () => {
+    // Validate required fields before generating PDF
+    if (!invoice.clientName.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter a client name before generating PDF.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (invoice.items.length === 0 || invoice.items.some(item => !item.description.trim())) {
+      toast({
+        title: "Missing Information",
+        description: "Please add at least one item with a description.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       setIsGeneratingPdf(true);
       await generatePdf(invoice);
       toast({
         title: "PDF Generated",
-        description: "Your document has been downloaded successfully.",
+        description: `Your ${invoice.isQuotation ? 'quotation' : 'invoice'} has been downloaded successfully.`,
       });
     } catch (error) {
       console.error("PDF generation error:", error);

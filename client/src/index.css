@@ -11,3 +11,33 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Add a utility for small mobile screens */
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  .xs\:space-y-0 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .xs\:space-x-4 > * + * {
+    margin-left: 1rem;
+  }
+  .xs\:w-32 {
+    width: 8rem;
+  }
+  
+  /* Premium UI styles */
+  .bg-premium-gradient {
+    background: linear-gradient(to right, rgba(226, 232, 240, 0.5), rgba(226, 232, 240, 0.0));
+  }
+  
+  .card-hover-effect {
+    @apply transition-all duration-200;
+  }
+  
+  .card-hover-effect:hover {
+    @apply shadow-md transform -translate-y-1;
+  }
+}

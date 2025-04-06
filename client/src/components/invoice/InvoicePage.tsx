@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { DocumentTypeToggle } from "./DocumentTypeToggle";
 import { DocumentForm } from "./DocumentForm";
-import { InvoiceHeader } from "./InvoiceHeader";
 import { InvoiceFooter } from "./InvoiceFooter";
 import { Invoice } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { generateDefaultInvoice } from "@/lib/invoiceUtils";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { DocumentPageHeader } from "@/components/layout/PageHeader";
 
 export function InvoicePage() {
   const [invoice, setInvoice] = useState<Invoice>(generateDefaultInvoice());
@@ -30,26 +31,28 @@ export function InvoicePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <InvoiceHeader onSaveTemplate={handleSaveTemplate} />
-      
-      <main className="flex-grow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout>
+      <div className="flex flex-col space-y-6">
+        <DocumentPageHeader onSaveTemplate={handleSaveTemplate} />
+        
+        <div className="space-y-4">
           <DocumentTypeToggle 
             isQuotation={invoice.isQuotation}
             onToggle={toggleDocumentType}
           />
           
-          <div className="bg-white shadow-sm rounded-lg overflow-hidden mt-6">
+          <div className="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
             <DocumentForm 
               invoice={invoice}
               setInvoice={setInvoice}
             />
           </div>
         </div>
-      </main>
+      </div>
       
-      <InvoiceFooter />
-    </div>
+      <div className="mt-8">
+        <InvoiceFooter />
+      </div>
+    </DashboardLayout>
   );
 }

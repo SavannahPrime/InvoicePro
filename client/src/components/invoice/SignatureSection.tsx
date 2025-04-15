@@ -150,18 +150,18 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
 
   const stopDrawing = () => {
     if (!isDrawing) return;
-    
+
     setIsDrawing(false);
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const signatureData = canvas.toDataURL("image/png");
     setInvoice((prev) => ({
       ...prev,
       signatureData,
     }));
-    
+
     if (hasSigned) {
       setSignatureDate(format(new Date(), "MMMM d, yyyy"));
       toast({
@@ -180,12 +180,12 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     setHasSigned(false);
-    
+
     setInvoice((prev) => ({
       ...prev,
       signatureData: "",
     }));
-    
+
     toast({
       title: "Signature cleared",
       description: "Your signature has been removed",
@@ -206,7 +206,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
             </div>
             <h3 className="text-sm font-medium text-gray-700">Signature</h3>
           </div>
-          
+
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -221,7 +221,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
             </Tooltip>
           </TooltipProvider>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div 
@@ -246,7 +246,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
                 onTouchEnd={stopDrawing}
               />
             </div>
-            
+
             <div className="mt-3 flex flex-col md:flex-row justify-between md:items-center space-y-3 md:space-y-0">
               <Button
                 type="button"
@@ -259,7 +259,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
                 <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                 Clear Signature
               </Button>
-              
+
               <div className="text-xs text-right text-gray-500">
                 {hasSigned && (
                   <div className="flex items-center">
@@ -270,7 +270,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
               </div>
             </div>
           </div>
-          
+
           <div className="flex flex-col justify-between">
             <div className="bg-gray-50 p-4 rounded-md mb-4">
               <h4 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
@@ -297,7 +297,7 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
                 )}
               </ul>
             </div>
-            
+
             <div className="space-y-4 mt-4">
                 <div>
                   <Label 

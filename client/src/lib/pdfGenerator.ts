@@ -1,4 +1,3 @@
-
 import { jsPDF } from "jspdf";
 import { Invoice, InvoiceItem } from "./types";
 import { formatCurrency } from "./invoiceUtils";
@@ -81,7 +80,8 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
       currentY += 6;
       const addressLines = invoice.companyAddress.split('\n');
       addressLines.forEach((line) => {
-        addStyledText(pdf, `📍 ${line.trim()}`, margin + 5, currentY, { fontSize: 9 });
+        const cleanLine = line.trim().replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
+        addStyledText(pdf, `📍 ${cleanLine}`, margin + 5, currentY, { fontSize: 9 });
         currentY += 5;
       });
     }
@@ -113,7 +113,8 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
       currentY += 6;
       const addressLines = invoice.clientAddress.split('\n');
       addressLines.forEach((line) => {
-        addStyledText(pdf, `📍 ${line.trim()}`, margin + 5, currentY, { fontSize: 9 });
+        const cleanLine = line.trim().replace(/[^\x20-\x7E]/g, ''); // Remove non-printable characters
+        addStyledText(pdf, `📍 ${cleanLine}`, margin + 5, currentY, { fontSize: 9 });
         currentY += 5;
       });
     }
@@ -173,7 +174,7 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
         pdf.setFillColor(252, 252, 252);
         pdf.rect(margin, currentY - 4, contentWidth, 8, 'F');
       }
-      
+
       addStyledText(pdf, item.description, margin + 5, currentY, { fontSize: 9 });
       addStyledText(pdf, item.quantity.toString(), margin + colWidths.description, currentY, { fontSize: 9 });
       addStyledText(pdf, formatCurrency(item.unitPrice), margin + colWidths.description + colWidths.quantity, currentY, { fontSize: 9 });
@@ -185,7 +186,7 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
     currentY += 5;
     const totalsWidth = 150;
     const totalsX = pageWidth - margin - totalsWidth;
-    
+
     pdf.setFillColor(249, 250, 251);
     pdf.rect(totalsX, currentY, totalsWidth, invoice.discount || invoice.taxRate ? 45 : 25, 'F');
 
@@ -216,7 +217,7 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
       currentY += 25;
       pdf.setFillColor(249, 250, 251);
       pdf.rect(margin, currentY, contentWidth, 25, 'F');
-      
+
       currentY += 6;
       addStyledText(pdf, "Payment Information", margin + 5, currentY, { fontSize: 10, fontStyle: 'bold' });
       currentY += 6;
@@ -233,7 +234,7 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
       currentY += 20;
       pdf.setFillColor(249, 250, 251);
       pdf.rect(margin, currentY, contentWidth, 25, 'F');
-      
+
       currentY += 6;
       addStyledText(pdf, "Notes", margin + 5, currentY, { fontSize: 10, fontStyle: 'bold' });
       currentY += 6;
@@ -247,11 +248,11 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
         const sigWidth = 50;
         const sigHeight = 20;
         pdf.addImage(invoice.signatureData, 'PNG', margin, currentY, sigWidth, sigHeight);
-        
+
         currentY += sigHeight + 5;
         pdf.setDrawColor(200, 200, 200);
         pdf.line(margin, currentY, margin + 80, currentY);
-        
+
         currentY += 5;
         addStyledText(pdf, "Authorized Signature", margin, currentY, { 
           fontSize: 8, 

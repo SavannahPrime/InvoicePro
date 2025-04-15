@@ -100,24 +100,54 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
     addStyledText(pdf, "FROM:", margin, currentY, { fontSize: 10, fontStyle: 'bold' });
     addStyledText(pdf, invoice.companyName, margin, currentY + 6, { fontSize: 11, fontStyle: 'bold' });
     
+    // Add complete company information with icons
+    let companyYOffset = currentY + 12;
+    
     // Add company address with line breaks
     if (invoice.companyAddress) {
       const addressLines = invoice.companyAddress.split('\n');
       addressLines.forEach((line, index) => {
-        addStyledText(pdf, line.trim(), margin, currentY + 12 + (index * 5), { fontSize: 9 });
+        addStyledText(pdf, `📍 ${line.trim()}`, margin, companyYOffset + (index * 5), { fontSize: 9 });
       });
+      companyYOffset += (addressLines.length * 5);
     }
     
-    // Add company email
+    // Add company contact information
     if (invoice.companyEmail) {
-      const addressLineCount = invoice.companyAddress ? invoice.companyAddress.split('\n').length : 0;
-      addStyledText(pdf, invoice.companyEmail, margin, currentY + 12 + (addressLineCount * 5) + 5, { fontSize: 9 });
+      companyYOffset += 5;
+      addStyledText(pdf, `✉️ ${invoice.companyEmail}`, margin, companyYOffset, { fontSize: 9 });
+    }
+    
+    if (invoice.paymentInstructions) {
+      companyYOffset += 5;
+      addStyledText(pdf, "Payment Details:", margin, companyYOffset, { fontSize: 9, fontStyle: 'bold' });
+      companyYOffset += 5;
+      const paymentLines = invoice.paymentInstructions.split('\n');
+      paymentLines.forEach((line, index) => {
+        addStyledText(pdf, `💳 ${line.trim()}`, margin, companyYOffset + (index * 5), { fontSize: 9 });
+      });
     }
     
     // To (Client) information - Right column
     const clientColX = pageWidth / 2;
     addStyledText(pdf, "TO:", clientColX, currentY, { fontSize: 10, fontStyle: 'bold' });
     addStyledText(pdf, invoice.clientName, clientColX, currentY + 6, { fontSize: 11, fontStyle: 'bold' });
+    
+    // Add complete client information
+    let clientYOffset = currentY + 12;
+    
+    if (invoice.clientAddress) {
+      const addressLines = invoice.clientAddress.split('\n');
+      addressLines.forEach((line, index) => {
+        addStyledText(pdf, `📍 ${line.trim()}`, clientColX, clientYOffset + (index * 5), { fontSize: 9 });
+      });
+      clientYOffset += (addressLines.length * 5);
+    }
+    
+    if (invoice.clientEmail) {
+      clientYOffset += 5;
+      addStyledText(pdf, `✉️ ${invoice.clientEmail}`, clientColX, clientYOffset, { fontSize: 9 });
+    }
     
     // Add client address with line breaks
     if (invoice.clientAddress) {

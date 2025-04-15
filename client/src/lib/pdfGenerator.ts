@@ -339,16 +339,22 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
     }
     
     // PAYMENT INSTRUCTIONS
-    if (invoice.paymentInstructions && !invoice.isQuotation) {
+    if (!invoice.isQuotation) {
       currentY += 20;
-      addStyledText(pdf, "PAYMENT INSTRUCTIONS:", margin, currentY, { 
+      addStyledText(pdf, "PAYMENT DETAILS:", margin, currentY, { 
         fontSize: 10, 
         fontStyle: 'bold' 
       });
       
       currentY += 6;
-      const splitInstructions = pdf.splitTextToSize(invoice.paymentInstructions, contentWidth);
-      addStyledText(pdf, splitInstructions.join('\n'), margin, currentY, { fontSize: 9 });
+      if (invoice.paymentMethod === 'M-PESA') {
+        addStyledText(pdf, "M-PESA Payment:", margin, currentY, { fontSize: 9, fontStyle: 'bold' });
+        currentY += 5;
+        addStyledText(pdf, `Pay Bill Number: ${invoice.paymentInstructions?.split('\n')[0] || ''}`, margin, currentY, { fontSize: 9 });
+      } else {
+        const splitInstructions = pdf.splitTextToSize(invoice.paymentInstructions || '', contentWidth);
+        addStyledText(pdf, splitInstructions.join('\n'), margin, currentY, { fontSize: 9 });
+      }
     }
     
     // SIGNATURE SECTION

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DocumentTypeToggle } from "./DocumentTypeToggle";
 import { DocumentForm } from "./DocumentForm";
@@ -14,10 +13,36 @@ export function InvoicePage() {
   const { toast } = useToast();
 
   const handleSaveTemplate = () => {
-    toast({
-      title: "Template Saved",
-      description: "Your template has been saved successfully.",
-    });
+    try {
+      // Get existing templates or initialize empty array
+      const existingTemplates = JSON.parse(localStorage.getItem('savedTemplates') || '[]');
+
+      // Create template object
+      const template = {
+        id: Date.now(),
+        name: invoice.companyName || 'Untitled Template',
+        type: invoice.isQuotation ? 'Quotation' : 'Invoice',
+        data: invoice,
+        lastUsed: new Date().toISOString()
+      };
+
+      // Add new template
+      existingTemplates.push(template);
+
+      // Save back to localStorage
+      localStorage.setItem('savedTemplates', JSON.stringify(existingTemplates));
+
+      toast({
+        title: "Template Saved",
+        description: "Your template has been saved and can be accessed from the Templates page.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save template. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const toggleDocumentType = (isQuotation: boolean) => {
@@ -35,13 +60,13 @@ export function InvoicePage() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col space-y-8">
           <DocumentPageHeader onSaveTemplate={handleSaveTemplate} />
-          
+
           <div className="space-y-6">
             <DocumentTypeToggle 
               isQuotation={invoice.isQuotation}
               onToggle={toggleDocumentType}
             />
-            
+
             <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
               <DocumentForm 
                 invoice={invoice}
@@ -50,7 +75,7 @@ export function InvoicePage() {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-12 mb-8">
           <InvoiceFooter />
         </div>

@@ -153,14 +153,15 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
     if (invoice.clientAddress) {
       const addressLines = invoice.clientAddress.split('\n');
       addressLines.forEach((line, index) => {
-        addStyledText(pdf, line.trim(), clientColX, currentY + 12 + (index * 5), { fontSize: 9 });
+        addStyledText(pdf, `📍 ${line.trim()}`, clientColX, clientYOffset + (index * 5), { fontSize: 9 });
       });
+      clientYOffset += (addressLines.length * 5);
     }
     
     // Add client email
     if (invoice.clientEmail) {
-      const addressLineCount = invoice.clientAddress ? invoice.clientAddress.split('\n').length : 0;
-      addStyledText(pdf, invoice.clientEmail, clientColX, currentY + 12 + (addressLineCount * 5) + 5, { fontSize: 9 });
+      clientYOffset += 5;
+      addStyledText(pdf, `✉️ ${invoice.clientEmail}`, clientColX, clientYOffset, { fontSize: 9 });
     }
     
     // DATES AND PAYMENT INFO SECTION

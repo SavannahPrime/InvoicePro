@@ -336,10 +336,14 @@ export async function generatePdf(invoice: Invoice): Promise<void> {
         pdf.setLineWidth(0.2);
         pdf.line(margin, currentY + sigHeight + 4, margin + 80, currentY + sigHeight + 4);
         
-        // Add signature text
-        addStyledText(pdf, "Authorized Signature", margin, currentY + sigHeight + 10, { 
+        // Add signature text and signee name
+        addStyledText(pdf, invoice.signeeName || "Authorized Signature", margin, currentY + sigHeight + 10, { 
           fontSize: 8, 
           color: [100, 100, 100] 
+        });
+        addStyledText(pdf, "Authorized Signatory", margin, currentY + sigHeight + 16, { 
+          fontSize: 7, 
+          color: [130, 130, 130] 
         });
       } catch (sigError) {
         console.error("Error adding signature to PDF:", sigError);

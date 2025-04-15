@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { CompanyInfoSection } from "./CompanyInfoSection";
 import { ClientInfoSection } from "./ClientInfoSection";
@@ -65,11 +66,17 @@ export function DocumentForm({ invoice, setInvoice }: DocumentFormProps) {
   return (
     <div className="p-6 border-b border-gray-200" id="document-form">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">
-          {invoice.isQuotation
-            ? `Quotation #${invoice.invoiceNumber}`
-            : `Invoice #${invoice.invoiceNumber}`}
-        </h2>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800">
+            {invoice.isQuotation
+              ? `Quotation #${invoice.invoiceNumber}`
+              : `Invoice #${invoice.invoiceNumber}`}
+          </h2>
+          <p className="text-sm text-gray-600 mt-1">
+            Created: {invoice.date ? format(invoice.date, 'PPP') : 'Not set'} • 
+            Valid until: {invoice.dueDate ? format(invoice.dueDate, 'PPP') : 'Not set'}
+          </p>
+        </div>
         <div className="flex space-x-4">
           <Button
             variant="outline"

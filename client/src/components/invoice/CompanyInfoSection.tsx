@@ -326,7 +326,7 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
                 htmlFor="date" 
                 className="block text-xs font-medium text-gray-500 mb-1.5"
               >
-                Issue Date
+                Date Created
               </Label>
               <div className="relative">
                 <Popover>
@@ -360,7 +360,7 @@ export function CompanyInfoSection({ invoice, setInvoice }: CompanyInfoSectionPr
                 htmlFor="due-date" 
                 className="block text-xs font-medium text-gray-500 mb-1.5"
               >
-                Due Date
+                Valid Until
               </Label>
               <div className="relative">
                 <Popover>

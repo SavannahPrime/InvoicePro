@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DocumentTypeToggle } from "./DocumentTypeToggle";
 import { DocumentForm } from "./DocumentForm";
@@ -13,7 +14,6 @@ export function InvoicePage() {
   const { toast } = useToast();
 
   const handleSaveTemplate = () => {
-    // In a real app, this would save the template to storage
     toast({
       title: "Template Saved",
       description: "Your template has been saved successfully.",
@@ -32,26 +32,28 @@ export function InvoicePage() {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col space-y-6">
-        <DocumentPageHeader onSaveTemplate={handleSaveTemplate} />
-        
-        <div className="space-y-4">
-          <DocumentTypeToggle 
-            isQuotation={invoice.isQuotation}
-            onToggle={toggleDocumentType}
-          />
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col space-y-8">
+          <DocumentPageHeader onSaveTemplate={handleSaveTemplate} />
           
-          <div className="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
-            <DocumentForm 
-              invoice={invoice}
-              setInvoice={setInvoice}
+          <div className="space-y-6">
+            <DocumentTypeToggle 
+              isQuotation={invoice.isQuotation}
+              onToggle={toggleDocumentType}
             />
+            
+            <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
+              <DocumentForm 
+                invoice={invoice}
+                setInvoice={setInvoice}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="mt-8">
-        <InvoiceFooter />
+        
+        <div className="mt-12 mb-8">
+          <InvoiceFooter />
+        </div>
       </div>
     </DashboardLayout>
   );

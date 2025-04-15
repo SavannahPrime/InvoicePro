@@ -134,6 +134,7 @@ export function ClientInfoSection({ invoice, setInvoice }: ClientInfoSectionProp
                     <SelectValue placeholder="Select payment method" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="M-PESA">M-PESA</SelectItem>
                     <SelectItem value="Bank Transfer">Bank Transfer</SelectItem>
                     <SelectItem value="Credit Card">Credit Card</SelectItem>
                     <SelectItem value="PayPal">PayPal</SelectItem>

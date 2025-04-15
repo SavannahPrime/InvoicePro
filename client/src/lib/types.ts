@@ -30,4 +30,5 @@ export interface Invoice {
   discountAmount?: string;
   total: string;
   signatureData?: string;
+  signeeName?: string;
 }

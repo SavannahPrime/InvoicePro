@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Pen, Trash2, Check, Pencil, Info } from "lucide-react";
 import { Invoice } from "@/lib/types";
@@ -297,19 +298,42 @@ export function SignatureSection({ invoice, setInvoice }: SignatureSectionProps)
               </ul>
             </div>
             
-            <div className="flex items-center space-x-2 mt-auto">
-              <Checkbox
-                id="terms"
-                checked={agreesToTerms}
-                onCheckedChange={handleTermsChange}
-              />
-              <Label
-                htmlFor="terms"
-                className="text-sm text-gray-600 cursor-pointer"
-              >
-                I agree to the terms and conditions
-              </Label>
-            </div>
+            <div className="space-y-4 mt-4">
+                <div>
+                  <Label 
+                    htmlFor="signee-name" 
+                    className="block text-xs font-medium text-gray-500 mb-1.5"
+                  >
+                    Signee Name
+                  </Label>
+                  <Input
+                    id="signee-name"
+                    value={invoice.signeeName || ''}
+                    onChange={(e) =>
+                      setInvoice((prev) => ({
+                        ...prev,
+                        signeeName: e.target.value,
+                      }))
+                    }
+                    className="bg-white/50"
+                    placeholder="Enter full name"
+                  />
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="terms"
+                    checked={agreesToTerms}
+                    onCheckedChange={handleTermsChange}
+                  />
+                  <Label
+                    htmlFor="terms"
+                    className="text-sm text-gray-600 cursor-pointer"
+                  >
+                    I agree to the terms and conditions outlined above
+                  </Label>
+                </div>
+              </div>
           </div>
         </div>
       </CardContent>
